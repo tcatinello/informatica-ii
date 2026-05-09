@@ -23,7 +23,7 @@ Material de cursada de **Informatica II** — Ingenieria Electronica, UTN Facult
 1. **Navegar online:** Podes explorar el codigo directamente desde GitHub haciendo click en las carpetas.
 2. **Clonar en tu PC:**
    ```bash
-   git clone https://github.com/weber-utn/informatica-ii.git
+   git clone https://github.com/sfweber/informatica-ii.git
    ```
 3. **Mantenerte actualizado:** Si ya lo clonaste, para traer las ultimas clases:
    ```bash
