@@ -471,17 +471,19 @@ const ALGOS={
       function qs(inicio,fin){
         pila.push({inicio,fin});
         const c=(inicio+fin)>>1, piv=a[c];
-        R.push({line:[1,2],band:[inicio,fin],pivot:c,pila,punteros:{piv:c},cap:`quicksort(${inicio},${fin}): pivote = el elemento central → ${piv}.`});
+        let pPos=c;   // posición actual del elemento-pivote (arranca en el central; sigue al valor al intercambiar)
+        R.push({line:[1,2],band:[inicio,fin],pivot:pPos,pila,punteros:{piv:pPos},cap:`quicksort(${inicio},${fin}): pivote = el elemento central → ${piv}.`});
         let i=inicio,j=fin;
         do{
-          while(a[i]<piv){R.comp++;R.push({line:5,band:[inicio,fin],pivot:c,a:i,pila,punteros:{i,j,piv:c},pred:{q:`¿${a[i]} < ${piv} (pivote)?`,correct:true},cap:`Avanzo i: ${a[i]} < ${piv}.`});i++;}
-          R.comp++;R.push({line:5,band:[inicio,fin],pivot:c,a:i,pila,punteros:{i,j,piv:c},pred:{q:`¿${a[i]} < ${piv} (pivote)?`,correct:false},cap:`Paro i en ${a[i]} (no es menor que ${piv}).`});
-          while(a[j]>piv){R.comp++;R.push({line:6,band:[inicio,fin],pivot:c,b:j,pila,punteros:{i,j,piv:c},pred:{q:`¿${a[j]} > ${piv} (pivote)?`,correct:true},cap:`Retrocedo j: ${a[j]} > ${piv}.`});j--;}
-          R.comp++;R.push({line:6,band:[inicio,fin],pivot:c,b:j,pila,punteros:{i,j,piv:c},pred:{q:`¿${a[j]} > ${piv} (pivote)?`,correct:false},cap:`Paro j en ${a[j]} (no es mayor que ${piv}).`});
+          while(a[i]<piv){R.comp++;R.push({line:5,band:[inicio,fin],pivot:pPos,a:i,pila,punteros:{i,j,piv:pPos},pred:{q:`¿${a[i]} < ${piv} (pivote)?`,correct:true},cap:`Avanzo i: ${a[i]} < ${piv}.`});i++;}
+          R.comp++;R.push({line:5,band:[inicio,fin],pivot:pPos,a:i,pila,punteros:{i,j,piv:pPos},pred:{q:`¿${a[i]} < ${piv} (pivote)?`,correct:false},cap:`Paro i en ${a[i]} (no es menor que ${piv}).`});
+          while(a[j]>piv){R.comp++;R.push({line:6,band:[inicio,fin],pivot:pPos,b:j,pila,punteros:{i,j,piv:pPos},pred:{q:`¿${a[j]} > ${piv} (pivote)?`,correct:true},cap:`Retrocedo j: ${a[j]} > ${piv}.`});j--;}
+          R.comp++;R.push({line:6,band:[inicio,fin],pivot:pPos,b:j,pila,punteros:{i,j,piv:pPos},pred:{q:`¿${a[j]} > ${piv} (pivote)?`,correct:false},cap:`Paro j en ${a[j]} (no es mayor que ${piv}).`});
           if(i<=j){
             if(i!==j){const x=a[i],y=a[j];a[i]=a[j];a[j]=x;R.mov++;
-              R.push({line:8,band:[inicio,fin],pivot:c,moved:[i,j],a:i,b:j,pila,punteros:{i,j,piv:c},cap:`Intercambio ${x} y ${y}.`});}
-            else R.push({line:7,band:[inicio,fin],pivot:c,a:i,b:j,pila,punteros:{i,j,piv:c},cap:`i y j se cruzaron en ${a[i]}.`});
+              if(i===pPos) pPos=j; else if(j===pPos) pPos=i;   // el pivote viaja con el swap
+              R.push({line:8,band:[inicio,fin],pivot:pPos,moved:[i,j],a:i,b:j,pila,punteros:{i,j,piv:pPos},cap:`Intercambio ${x} y ${y}.`});}
+            else R.push({line:7,band:[inicio,fin],pivot:pPos,a:i,b:j,pila,punteros:{i,j,piv:pPos},cap:`i y j se cruzaron en ${a[i]}.`});
             i++;j--;
           }
         }while(i<=j);
