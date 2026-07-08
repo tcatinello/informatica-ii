@@ -79,8 +79,10 @@
   .stnode.active text{fill:#fff}
   .edge{fill:none;stroke:#7b8a99;stroke-width:2.5}
   .elabel{font-size:13px;fill:#34506b;font-family:ui-monospace,Consolas,monospace}
-  .elabel.guard{fill:var(--accent)}
-  .elabel.okpath{fill:var(--ok)}
+  /* formato evento [guarda] / acción — mismos colores que las slides de clase */
+  .elabel .ev{fill:var(--accent2);font-weight:700}
+  .elabel .gd{fill:var(--ok);font-weight:700}
+  .elabel .ac{fill:var(--accent);font-weight:700}
   .hint{color:var(--muted);font-size:12px;margin:6px 0 0}
   .kbd{font-size:11.5px;color:var(--muted)}
   .kbd b{color:var(--ink);background:#eef2f6;border:1px solid var(--line);border-radius:4px;padding:0 5px;font-family:ui-monospace,Consolas,monospace}
@@ -97,48 +99,53 @@
 <!-- DIAGRAMA a ancho completo -->
 <div class="panel fullbleed">
   <h2 style="margin:0 0 6px">Diagrama de estados (STD) — el estado activo procesa el próximo byte</h2>
-  <svg viewBox="0 0 1500 322" preserveAspectRatio="xMidYMid meet">
+  <svg viewBox="0 0 1760 322" preserveAspectRatio="xMidYMid meet">
     <defs>
       <marker id="ah" markerWidth="9" markerHeight="9" refX="7.5" refY="3" orient="auto" markerUnits="strokeWidth">
         <path d="M0,0 L8,3 L0,6 Z" fill="#7b8a99"/>
       </marker>
     </defs>
     <!-- FORWARD: rectos, en el centro de las cajas (y=96). etiqueta encima -->
-    <path class="edge" d="M255,96 L345,96" marker-end="url(#ah)"/>
-    <text class="elabel" x="300" y="74" text-anchor="middle">==STX</text>
-    <text class="elabel" x="300" y="88" text-anchor="middle">/ chk = 0</text>
-    <path class="edge" d="M555,96 L645,96" marker-end="url(#ah)"/>
-    <text class="elabel" x="600" y="87" text-anchor="middle">[cant&gt;0]</text>
-    <path class="edge" d="M855,96 L945,96" marker-end="url(#ah)"/>
-    <text class="elabel" x="900" y="87" text-anchor="middle">[cant==0]</text>
-    <path class="edge" d="M1155,96 L1245,96" marker-end="url(#ah)"/>
-    <text class="elabel" x="1200" y="87" text-anchor="middle">[byte==chk]</text>
+    <path class="edge" d="M220,96 L400,96" marker-end="url(#ah)"/>
+    <text class="elabel" x="310" y="75" text-anchor="middle"><tspan class="ev">byte_recv</tspan> <tspan class="gd">[byte==STX]</tspan></text>
+    <text class="elabel" x="310" y="90" text-anchor="middle">/ <tspan class="ac">chk=0</tspan></text>
+    <path class="edge" d="M600,96 L780,96" marker-end="url(#ah)"/>
+    <text class="elabel" x="690" y="75" text-anchor="middle"><tspan class="ev">byte_recv</tspan> <tspan class="gd">[byte&gt;0]</tspan></text>
+    <text class="elabel" x="690" y="90" text-anchor="middle">/ <tspan class="ac">cant=byte</tspan></text>
+    <path class="edge" d="M980,96 L1160,96" marker-end="url(#ah)"/>
+    <text class="elabel" x="1070" y="56" text-anchor="middle"><tspan class="ev">byte_recv</tspan> <tspan class="gd">[cant==1]</tspan> /</text>
+    <text class="elabel" x="1070" y="75" text-anchor="middle"><tspan class="ac">guardar byte,</tspan></text>
+    <text class="elabel" x="1070" y="90" text-anchor="middle"><tspan class="ac">chk^=byte, cant--</tspan></text>
+    <path class="edge" d="M1360,96 L1540,96" marker-end="url(#ah)"/>
+    <text class="elabel" x="1450" y="88" text-anchor="middle"><tspan class="ev">byte_recv</tspan> <tspan class="gd">[byte==chk]</tspan></text>
     <!-- ARRIBA: self STX (rectangular) y skip CANT-&gt;CHK (carril alto). etiqueta SOBRE -->
-    <path class="edge" d="M110,68 L110,44 L190,44 L190,68" marker-end="url(#ah)"/>
-    <text class="elabel" x="150" y="38" text-anchor="middle">≠STX</text>
-    <path class="edge" d="M480,68 L480,24 L1020,24 L1020,68" marker-end="url(#ah)"/>
-    <text class="elabel" x="750" y="17" text-anchor="middle">[cant==0]</text>
+    <path class="edge" d="M80,68 L80,44 L160,44 L160,68" marker-end="url(#ah)"/>
+    <text class="elabel" x="120" y="38" text-anchor="middle"><tspan class="ev">byte_recv</tspan> <tspan class="gd">[byte≠STX]</tspan></text>
+    <path class="edge" d="M530,68 L530,24 L1230,24 L1230,68" marker-end="url(#ah)"/>
+    <text class="elabel" x="880" y="17" text-anchor="middle"><tspan class="ev">byte_recv</tspan> <tspan class="gd">[byte==0]</tspan></text>
     <!-- DATOS self-loop ABAJO (rectangular). etiqueta DEBAJO -->
-    <path class="edge" d="M715,124 L715,152 L785,152 L785,124" marker-end="url(#ah)"/>
-    <text class="elabel" x="750" y="168" text-anchor="middle">[cant&gt;0] /</text>
-    <text class="elabel" x="750" y="182" text-anchor="middle">guardar byte, chk^=byte, cant--</text>
+    <path class="edge" d="M845,124 L845,152 L915,152 L915,124" marker-end="url(#ah)"/>
+    <text class="elabel" x="880" y="168" text-anchor="middle"><tspan class="ev">byte_recv</tspan> <tspan class="gd">[cant&gt;1]</tspan> /</text>
+    <text class="elabel" x="880" y="182" text-anchor="middle"><tspan class="ac">guardar byte, chk^=byte, cant--</tspan></text>
     <!-- RETORNOS anidados (sin cruces). etiqueta DEBAJO del carril -->
     <!-- CHK -> STX (checksum mal): carril mas alto, entra a STX mas a la DERECHA -->
-    <path class="edge" d="M1050,124 L1050,210 L200,210 L200,124" marker-end="url(#ah)"/>
-    <text class="elabel guard" x="600" y="226" text-anchor="middle">[byte≠chk] / descartar</text>
+    <path class="edge" d="M1260,124 L1260,210 L200,210 L200,124" marker-end="url(#ah)"/>
+    <text class="elabel" x="730" y="226" text-anchor="middle"><tspan class="ev">byte_recv</tspan> <tspan class="gd">[byte≠chk]</tspan> / <tspan class="ac">descartar</tspan></text>
     <!-- ETX -> STX  (DOS transiciones explícitas y separadas), anidadas por debajo de CHK -->
     <!-- (a) byte == ETX : paquete válido -->
-    <path class="edge" d="M1330,124 L1330,252 L170,252 L170,124" marker-end="url(#ah)"/>
-    <text class="elabel okpath" x="745" y="268" text-anchor="middle">==ETX / mostrarPaquete()</text>
+    <path class="edge" d="M1620,124 L1620,252 L170,252 L170,124" marker-end="url(#ah)"/>
+    <text class="elabel" x="895" y="268" text-anchor="middle"><tspan class="ev">byte_recv</tspan> <tspan class="gd">[byte==ETX]</tspan> / <tspan class="ac">mostrarPaquete()</tspan></text>
     <!-- (b) byte ≠ ETX : se descarta (carril mas bajo, entra a STX mas a la IZQUIERDA) -->
-    <path class="edge" d="M1378,124 L1378,294 L140,294 L140,124" marker-end="url(#ah)"/>
-    <text class="elabel guard" x="745" y="310" text-anchor="middle">≠ETX / descarta</text>
+    <path class="edge" d="M1690,124 L1690,294 L140,294 L140,124" marker-end="url(#ah)"/>
+    <text class="elabel" x="915" y="310" text-anchor="middle"><tspan class="ev">byte_recv</tspan> <tspan class="gd">[byte≠ETX]</tspan> / <tspan class="ac">descartar</tspan></text>
+    <!-- Leyenda de notación (como en las slides) -->
+    <text class="elabel" x="1750" y="316" text-anchor="end">Formato: <tspan class="ev">evento</tspan> <tspan class="gd">[guarda]</tspan> / <tspan class="ac">acción</tspan></text>
     <!-- NODOS (cajas mas bajas) -->
-    <g class="stnode" data-state="STX"><rect x="50" y="68" width="200" height="56" rx="11"/><text x="150" y="102" text-anchor="middle">EST_STX</text></g>
-    <g class="stnode" data-state="CANT"><rect x="350" y="68" width="200" height="56" rx="11"/><text x="450" y="102" text-anchor="middle">EST_CANT</text></g>
-    <g class="stnode" data-state="DATOS"><rect x="650" y="68" width="200" height="56" rx="11"/><text x="750" y="102" text-anchor="middle">EST_DATOS</text></g>
-    <g class="stnode" data-state="CHK"><rect x="950" y="68" width="200" height="56" rx="11"/><text x="1050" y="102" text-anchor="middle">EST_CHK</text></g>
-    <g class="stnode" data-state="ETX"><rect x="1250" y="68" width="200" height="56" rx="11"/><text x="1350" y="102" text-anchor="middle">EST_ETX</text></g>
+    <g class="stnode" data-state="STX"><rect x="20" y="68" width="200" height="56" rx="11"/><text x="120" y="102" text-anchor="middle">EST_STX</text></g>
+    <g class="stnode" data-state="CANT"><rect x="400" y="68" width="200" height="56" rx="11"/><text x="500" y="102" text-anchor="middle">EST_CANT</text></g>
+    <g class="stnode" data-state="DATOS"><rect x="780" y="68" width="200" height="56" rx="11"/><text x="880" y="102" text-anchor="middle">EST_DATOS</text></g>
+    <g class="stnode" data-state="CHK"><rect x="1160" y="68" width="200" height="56" rx="11"/><text x="1260" y="102" text-anchor="middle">EST_CHK</text></g>
+    <g class="stnode" data-state="ETX"><rect x="1540" y="68" width="200" height="56" rx="11"/><text x="1640" y="102" text-anchor="middle">EST_ETX</text></g>
   </svg>
 </div>
 

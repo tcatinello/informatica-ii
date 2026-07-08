@@ -1,6 +1,6 @@
 # Clase 11
 
-**Tema:** Máquinas de estado (FSM). Modelar un sistema con **estados** finitos, **transiciones** y **acciones**, e implementarlo en C con `switch`-`case` + `enum` (un estado por `case`). De un reconocedor simple a una **FSM extendida (EFSM)** que agrega variables cuando la máquina sola no alcanza.
+**Tema:** Máquinas de estado (FSM). Modelar un sistema con **estados** finitos, **transiciones** y **acciones**, e implementarlo en C con `switch`-`case` + `enum` (un estado por `case`) o con **punteros a función** (un estado = una función). De un reconocedor simple a una **FSM extendida (EFSM)** que agrega variables cuando la máquina sola no alcanza.
 
 ## Ejemplos
 
@@ -13,6 +13,9 @@
 
 * **ejemplo4.c** — Tratamiento de un **protocolo** de comunicaciones `| STX | CANT | DATOS | CHK | ETX |` con checksum XOR (**EFSM**). Probar: `gcc -Wall ejemplo4.c -o ejemplo4 && ./ejemplo4`.
   Tiene un **visualizador interactivo** (ver más abajo).
+
+* **ejemplo5.c** — Detector de secuencia **con punteros a función** (**Mealy**): un estado = una función; el estado actual es un **puntero a función** (`nextState`) y transicionar = asignarle otra función. Escala mejor que `switch`-`case` cuando la máquina crece.
+  Probar: `gcc -Wall ejemplo5.c -o ejemplo5 && echo "abcd" | ./ejemplo5`
 
 * **formato_FSM.c** — **Plantilla** (molde) de FSM con `switch`+`enum`. Es un esqueleto para completar (definís vos los estados y la condición de salida).
 
